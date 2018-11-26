@@ -25,9 +25,6 @@ for side in range(4):
 bound_pen.hideturtle()
 
 
-#draw the whirlpool at whirl_x, whirl_y
-hazards.whirlpool(0,0)
-
 #make the boat
 pinta=turtle.Turtle()
 pinta.penup()
@@ -54,6 +51,19 @@ def rudL():
     pinta.setheading(pinta.heading()+25)
 
 
+#draw the whirlpool at whirl_x, whirl_y if you press p
+pull=False
+def whirl():
+    hazards.whirlpool(0,0)
+    global pull
+    pull=True
+
+def build_island():
+    canvas=wn.getcanvas()
+    x,y =canvas.winfo_pointerxy()
+    hazards.island(x,y,pinta)
+
+
 hazards.weathervane(45,2)
 
 while True:
@@ -63,13 +73,16 @@ while True:
     turtle.onkey(decel, 's')
     turtle.onkey(rudR, 'd')
     turtle.onkey(rudL, 'a')
+    turtle.onkey(build_island, 'i')
+    turtle.onkey(whirl, 'v')
 
     #boat movement
     pinta.fd(prop)
     pinta.write(prop)
     hazards.windpull(pinta, 45, 2)
-    hazards.whirlpull(pinta)
-    #whirlpull()
+
+    if pull:
+        hazards.whirlpull(pinta)
 
     #boundries
     if pinta.xcor()>300:

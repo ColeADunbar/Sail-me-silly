@@ -2,6 +2,17 @@
 import turtle
 from math import *
 
+#make islands
+def island(x,y,boat):
+    island=turtle.Turtle()
+    island.speed(0)
+    island.penup()
+    island.setposition(x,y)
+    island.pendown()
+    island.circle(20)
+    return
+
+# make wind
 def weathervane(angle,power):
     vane=turtle.Turtle()
     vane.speed(0)
