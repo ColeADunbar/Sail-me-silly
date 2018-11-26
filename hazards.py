@@ -3,13 +3,17 @@ import turtle
 from math import *
 
 #make islands
-def island(x,y,boat):
+def island(x,y):
     island=turtle.Turtle()
+    island.hideturtle()
     island.speed(0)
     island.penup()
     island.setposition(x,y)
     island.pendown()
+    island.fillcolor("red")
+    island.begin_fill()
     island.circle(20)
+    island.end_fill()
     return
 
 # make wind
@@ -20,7 +24,6 @@ def weathervane(angle,power):
     vane.setposition(295,295)
     vane.setheading(angle)
     vane.pendown()
-    vane.write(power)
     vane.shape("turtle")
     return
 
@@ -30,8 +33,8 @@ def windpull(boat, angle, power):
     boat.setx(boat.xcor()+cos(angle)*power)
     return
 
+#make whirl pool
 def whirlpool(x,y):
-    #make whirl pool
     wpensize = 5
     whirl_pen=turtle.Turtle()
     whirl_pen.hideturtle()
@@ -50,9 +53,11 @@ def whirlpool(x,y):
         wpensize -= 1/200 * wpensize
 
 
+#TODO it would be cool if being in the whirlpool made the boat turn into the
+#whirlpool, something like pinta.left(abs(whirl_slope-pinta.heading) 
 def whirlpull(pinta):
-    whirl_x = 0
-    whirl_y = 0
+    global whirl_x
+    global whirl_y
     whirl_dist = sqrt((whirl_x - pinta.xcor())**2 + (whirl_y - pinta.ycor())**2)
     c = whirl_dist
     #print(c)

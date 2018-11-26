@@ -4,6 +4,7 @@ import os
 import time
 from math import *
 import hazards as hazards
+import random
 
 #make the 2d field
 wn=turtle.Screen()
@@ -44,36 +45,35 @@ def decel():
     if prop>-3:
         prop-=1
 
-def rudR():
-    pinta.setheading(pinta.heading()-25)
-
-def rudL():
-    pinta.setheading(pinta.heading()+25)
-
 
 #draw the whirlpool at whirl_x, whirl_y if you press p
 pull=False
+whirl_x=0
+whirl_y=0
 def whirl():
-    hazards.whirlpool(0,0)
+    global whirl_x
+    whirl_x=random.randint(-200,200)
+    global whirl_y
+    whirl_y=random.randint(-200,200)
+    hazards.whirlpool(whirl_x,whirl_y)
     global pull
     pull=True
 
-def build_island():
-    canvas=wn.getcanvas()
-    x,y =canvas.winfo_pointerxy()
-    hazards.island(x,y,pinta)
-
 
 hazards.weathervane(45,2)
+
+
+def island_build():
+    hazards.island(random.randint(-300,300),random.randint(-300,300))
 
 while True:
 
     turtle.listen()
     turtle.onkey(accel, 'w')
     turtle.onkey(decel, 's')
-    turtle.onkey(rudR, 'd')
-    turtle.onkey(rudL, 'a')
-    turtle.onkey(build_island, 'i')
+    turtle.onkey(lambda: pinta.right(25), 'd')
+    turtle.onkey(lambda: pinta.left(25), 'a')
+    turtle.onkey(island_build,'i')
     turtle.onkey(whirl, 'v')
 
     #boat movement
@@ -81,6 +81,7 @@ while True:
     pinta.write(prop)
     hazards.windpull(pinta, 45, 2)
 
+    #hit v to place a whirlpool
     if pull:
         hazards.whirlpull(pinta)
 
@@ -98,9 +99,5 @@ while True:
 
 #make rudder
 
-#make wind
-
 #make sail
-
-
 
