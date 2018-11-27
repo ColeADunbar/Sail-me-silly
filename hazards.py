@@ -14,6 +14,7 @@ def island(x,y):
     island.begin_fill()
     island.circle(20)
     island.end_fill()
+    #update the boundries
     return
 
 # make wind
@@ -43,6 +44,8 @@ def whirlpool(x,y):
     whirl_pen.penup()
     whirl_pen.setposition(x,y)
     whirl_pen.pendown()
+    tmp=turtle.tracer() #this makes it only update the screen every 20 frames
+    turtle.tracer(30)
     segment_OG_len = .15
     spiral_segment_length = segment_OG_len
     for segment in range(200):
@@ -51,20 +54,20 @@ def whirlpool(x,y):
         whirl_pen.lt(15)
         spiral_segment_length += segment_OG_len
         wpensize -= 1/200 * wpensize
+    turtle.tracer(tmp)
+    return
 
 
 #TODO it would be cool if being in the whirlpool made the boat turn into the
 #whirlpool, something like pinta.left(abs(whirl_slope-pinta.heading) 
-def whirlpull(pinta):
-    global whirl_x
-    global whirl_y
+def whirlpull(pinta, whirl_x, whirl_y):
     whirl_dist = sqrt((whirl_x - pinta.xcor())**2 + (whirl_y - pinta.ycor())**2)
     c = whirl_dist
     #print(c)
     max_pull = 9
     pull_curve_intensity = 75 # Higher is more linear. Should be around 10 - 100.
     move_to_whirl = max_pull * 2.7**-(1/pull_curve_intensity * c)
-    if pinta.xcor() != 0:
+    if pinta.xcor() != 0 and pinta.xcor()-whirl_x != 0:
         whirl_slope = (pinta.ycor() - whirl_y)/(pinta.xcor() - whirl_x)
         adjust_x = move_to_whirl/sqrt(whirl_slope**2 + 1)
         adjust_y = whirl_slope * adjust_x

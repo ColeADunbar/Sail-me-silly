@@ -6,6 +6,7 @@ from math import *
 import hazards as hazards
 import random
 
+
 #make the 2d field
 wn=turtle.Screen()
 wn.bgcolor("slate blue")
@@ -14,7 +15,7 @@ wn.setup(650,650)
 
 #make a border
 bound_pen=turtle.Turtle()
-bound_pen.speed(0)
+bound_pen.speed(10)
 bound_pen.color("white")
 bound_pen.penup()
 bound_pen.setposition(-300,-300)
@@ -25,6 +26,8 @@ for side in range(4):
     bound_pen.lt(90)
 bound_pen.hideturtle()
 
+#create boundry matrix
+boundMat=[[[0 for xy in range(2)] for col in range(6)] for row in range(6)]
 
 #make the boat
 pinta=turtle.Turtle()
@@ -47,20 +50,18 @@ def decel():
 
 
 #draw the whirlpool at whirl_x, whirl_y if you press p
-pull=False
-whirl_x=0
-whirl_y=0
+whirl_location=[]
+pull=0
 def whirl():
-    global whirl_x
-    whirl_x=random.randint(-200,200)
-    global whirl_y
-    whirl_y=random.randint(-200,200)
-    hazards.whirlpool(whirl_x,whirl_y)
+    global whirl_location
     global pull
-    pull=True
+    whirl_location.append([random.randint(-200,200),random.randint(-200,200)])
+    hazards.whirlpool(whirl_location[pull][0],whirl_location[pull][1])
+    pull+=1
 
-
-hazards.weathervane(45,2)
+windAngle=180
+windForce=1
+hazards.weathervane(windAngle,windForce)
 
 
 def island_build():
@@ -69,21 +70,21 @@ def island_build():
 while True:
 
     turtle.listen()
-    turtle.onkey(accel, 'w')
-    turtle.onkey(decel, 's')
-    turtle.onkey(lambda: pinta.right(25), 'd')
-    turtle.onkey(lambda: pinta.left(25), 'a')
+    turtle.onkey(accel, 'Up')
+    turtle.onkey(decel, 'Down')
+    turtle.onkey(lambda: pinta.right(25), 'Right')
+    turtle.onkey(lambda: pinta.left(25), 'Left')
     turtle.onkey(island_build,'i')
     turtle.onkey(whirl, 'v')
 
     #boat movement
     pinta.fd(prop)
     pinta.write(prop)
-    hazards.windpull(pinta, 45, 2)
+    hazards.windpull(pinta, windAngle,windForce)
 
     #hit v to place a whirlpool
-    if pull:
-        hazards.whirlpull(pinta)
+    for i in whirl_location:
+        hazards.whirlpull(pinta, i[0], i[1])
 
     #boundries
     if pinta.xcor()>300:
