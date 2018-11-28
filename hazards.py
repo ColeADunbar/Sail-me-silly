@@ -3,19 +3,26 @@ import turtle
 from math import *
 
 #make islands
-def island(x,y):
+def island(x,y, radius):
     island=turtle.Turtle()
     island.hideturtle()
     island.speed(0)
-    island.penup()
+    #island.penup()
     island.setposition(x,y)
     island.pendown()
     island.fillcolor("red")
     island.begin_fill()
-    island.circle(20)
+    island.circle(radius)
     island.end_fill()
     #update the boundries
     return
+
+def islandpull(boat,x,y,r):
+    if ((boat.xcor()-x)**2+(boat.ycor()-y)**2)<r**2:
+        for i in range(2):
+            boat.undo()
+    return
+
 
 # make wind
 def weathervane(angle,power):
@@ -26,6 +33,8 @@ def weathervane(angle,power):
     vane.setheading(angle)
     vane.pendown()
     vane.shape("turtle")
+    vane.resizemode("user")
+    vane.turtlesize(1,power+1,1)
     return
 
 def windpull(boat, angle, power):
@@ -67,7 +76,8 @@ def whirlpull(pinta, whirl_x, whirl_y):
     max_pull = 9
     pull_curve_intensity = 75 # Higher is more linear. Should be around 10 - 100.
     move_to_whirl = max_pull * 2.7**-(1/pull_curve_intensity * c)
-    if pinta.xcor() != 0 and pinta.xcor()-whirl_x != 0:
+    whirl_slope=0
+    if pinta.xcor()-whirl_x != 0:
         whirl_slope = (pinta.ycor() - whirl_y)/(pinta.xcor() - whirl_x)
         adjust_x = move_to_whirl/sqrt(whirl_slope**2 + 1)
         adjust_y = whirl_slope * adjust_x

@@ -27,7 +27,7 @@ for side in range(4):
 bound_pen.hideturtle()
 
 #create boundry matrix
-boundMat=[[[0 for xy in range(2)] for col in range(6)] for row in range(6)]
+boundMat=[[[0 for xy in range(2)] for col in range(650)] for row in range(650)]
 
 #make the boat
 pinta=turtle.Turtle()
@@ -59,13 +59,29 @@ def whirl():
     hazards.whirlpool(whirl_location[pull][0],whirl_location[pull][1])
     pull+=1
 
-windAngle=180
-windForce=1
-hazards.weathervane(windAngle,windForce)
 
-
+island_location=[]
+island_count=0
 def island_build():
-    hazards.island(random.randint(-300,300),random.randint(-300,300))
+    global island_location
+    global island_count
+    island_location.append([random.randint(-300,300),random.randint(-300,300),random.randint(10,40)])
+    x=island_location[island_count][0]
+    y=island_location[island_count][1]
+    radius=island_location[island_count][2]
+    hazards.island(x, y-radius, radius)
+    island_count+=1
+    #update boundmat TODO this is a project for later
+
+
+windAngle=0
+windForce=0
+def wind():
+    global windAngle
+    global windForce
+    windAngle=random.randint(0,359)
+    windForce=random.randint(0,5)
+    hazards.weathervane(windAngle,windForce)
 
 while True:
 
@@ -74,15 +90,23 @@ while True:
     turtle.onkey(decel, 'Down')
     turtle.onkey(lambda: pinta.right(25), 'Right')
     turtle.onkey(lambda: pinta.left(25), 'Left')
-    turtle.onkey(island_build,'i')
-    turtle.onkey(whirl, 'v')
 
     #boat movement
     pinta.fd(prop)
     pinta.write(prop)
+
+    #hit i to place an island WARNING this must be right after write and fd
+    turtle.onkey(island_build,'i')
+    for i in island_location:
+        hazards.islandpull(pinta, i[0],i[1],i[2])
+
+    #hit w to change the wind
+    turtle.onkey(wind, 'w')
     hazards.windpull(pinta, windAngle,windForce)
 
+
     #hit v to place a whirlpool
+    turtle.onkey(whirl, 'v')
     for i in whirl_location:
         hazards.whirlpull(pinta, i[0], i[1])
 
