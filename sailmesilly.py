@@ -83,6 +83,7 @@ def wind():
     windForce=random.randint(0,5)
     hazards.weathervane(windAngle,windForce)
 
+
 while True:
 
     turtle.listen()
@@ -93,8 +94,7 @@ while True:
 
     #boat movement
     pinta.fd(prop)
-    pinta.write(prop)
-
+    pinta.write(".")
     #hit i to place an island WARNING this must be right after write and fd
     turtle.onkey(island_build,'i')
     for i in island_location:
@@ -120,8 +120,9 @@ while True:
     if pinta.ycor()<-300:
         pinta.sety(-300)
 
+    pinta.write(prop)
     time.sleep(.04)
-
+    pinta.undo()
 #make rudder
 
 #make sail

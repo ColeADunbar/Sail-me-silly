@@ -7,7 +7,7 @@ def island(x,y, radius):
     island=turtle.Turtle()
     island.hideturtle()
     island.speed(0)
-    #island.penup()
+    island.penup()
     island.setposition(x,y)
     island.pendown()
     island.fillcolor("red")
