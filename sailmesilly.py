@@ -83,6 +83,9 @@ def wind():
     windForce=random.randint(0,5)
     hazards.weathervane(windAngle,windForce)
 
+def goal():
+    goal1=hazards.zone(0,0,20)
+    goal1.draw("green")
 
 while True:
 
@@ -93,16 +96,28 @@ while True:
     turtle.onkey(lambda: pinta.left(25), 'Left')
 
     #boat movement
-    pinta.fd(prop)
+    for i in range(prop):
+        pinta.fd(1)
     pinta.write(".")
+
     #hit i to place an island WARNING this must be right after write and fd
     turtle.onkey(island_build,'i')
     for i in island_location:
         hazards.islandpull(pinta, i[0],i[1],i[2])
 
+    #hit g to place a goal
+    turtle.onkey(goal, 'g')
+    try:
+        if goal1.active:
+            goal1.force(pinta)
+            print("goal!")
+    except NameError:
+        pass
+
     #hit w to change the wind
     turtle.onkey(wind, 'w')
-    hazards.windpull(pinta, windAngle,windForce)
+    for i in range(windForce):
+        hazards.windpull(pinta, windAngle,1)
 
 
     #hit v to place a whirlpool

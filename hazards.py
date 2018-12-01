@@ -2,6 +2,36 @@
 import turtle
 from math import *
 
+
+
+#make zone class that can be differentiated into islands/goals
+class zone(turtle.Turtle):
+
+    def __init__(self, x, y, r):
+        self.radius=r
+        self.active=False
+        super(zone, self).__init__()
+        self.penup()
+        self.hideturtle()
+        self.speed(0)
+        self.setposition(x,y)
+        return
+
+    def draw(self, color):
+        self.active=True
+        self.pendown()
+        self.fillcolor(color)
+        self.begin_fill()
+        self.circle(self.radius)
+        self.end_fill()
+        return
+
+    def force(self,boat):
+        if ((boat.xcor()-self.xcor())**2+(boat.ycor()-self.ycor())**2)<self.radius**2:
+            for i in range(2):
+                boat.undo()
+        return
+
 #make islands
 def island(x,y, radius):
     island=turtle.Turtle()
@@ -39,8 +69,9 @@ def weathervane(angle,power):
 
 def windpull(boat, angle, power):
     angle=radians(angle)
-    boat.sety(boat.ycor()+sin(angle)*power)
-    boat.setx(boat.xcor()+cos(angle)*power)
+    for i in range(power):
+        boat.sety(boat.ycor()+sin(angle))
+        boat.setx(boat.xcor()+cos(angle))
     return
 
 #make whirl pool
